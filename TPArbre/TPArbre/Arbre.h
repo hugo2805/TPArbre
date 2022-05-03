@@ -37,7 +37,7 @@ public:
     void ParcoursPostfix(Node* noeud);
 
     //Calcul du nombre de noeuds
-    int NbNode();
+    int NbNode(Node* racine);
     //calcul de la profondeur de l'arbre
     int ProfondeurArbre(Node* racine, Arbre arbre);
 

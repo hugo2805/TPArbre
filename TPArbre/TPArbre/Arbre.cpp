@@ -38,7 +38,7 @@ void Arbre::Placer(Node* noeud)
 	while (courant)
 	{
 		precedent = courant;
-		if (noeud->data < noeud->data)
+		if (noeud->data < courant->data)
 			courant = courant->leftChild;
 		else
 			courant = courant->rightChild;
@@ -107,6 +107,14 @@ void Arbre::ParcoursPostfix(Node* noeud)
 	}
 }
 
+int Arbre::NbNode(Node* racine)
+{
+	if (racine == nullptr)
+		return 0;
+	else
+		return 1 + NbNode(racine->leftChild) + NbNode(racine->rightChild);
+}
+
 int Arbre::ProfondeurArbre(Node* racine, Arbre arbre)
 {
 	int profDroite, profGauche, profondeur;
@@ -119,9 +127,9 @@ int Arbre::ProfondeurArbre(Node* racine, Arbre arbre)
 	else
 	{	
 		//calcul de la profondeur du sous arbre droit
-		profDroite = arbre.ProfondeurArbre(racine->rightChild);
+		profDroite = arbre.ProfondeurArbre(racine->rightChild, arbre);
 		//calcul de la profondeur du sous arbre gauche
-		profGauche = arbre.ProfondeurArbre(racine->leftChild);
+		profGauche = arbre.ProfondeurArbre(racine->leftChild, arbre);
 
 		if (profDroite > profGauche)
 			profondeur = profDroite;
@@ -158,17 +166,20 @@ void Arbre::Supprimer(Node* noeud)
 			courant = courant->leftChild;
 	}
 
-	//courant pointe maintenant vers le noeud précédent le noeud a supprimer
-	if (courant->rightChild == noeud)
-		courant->rightChild = droite;
-	else
-		courant->leftChild = droite;
-	//on replace l'autre fils du noeud disparu
-	if (gauche)
-		Placer(gauche);
-	//on libère l'objet noeud
-	delete noeud;
-
+	if (courant != nullptr)
+	{
+		//courant pointe maintenant vers le noeud précédent le noeud a supprimer
+		if (courant->rightChild == noeud)
+			courant->rightChild = droite;
+		else
+			courant->leftChild = droite;
+		//on replace l'autre fils du noeud disparu
+		if (gauche)
+			Placer(gauche);
+		//on libère l'objet noeud
+		delete noeud;
+	}
+	
 }
 
 //Afficher l'arbre
