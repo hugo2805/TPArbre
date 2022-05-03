@@ -21,6 +21,11 @@ Node* Arbre::getRoot()
 	return root;
 }
 
+void Arbre::setRoot(Node* racine)
+{
+	this->root = racine;
+}
+
 //Placer une node
 void Arbre::Placer(Node* noeud)
 {
@@ -85,7 +90,7 @@ void Arbre::ParcoursPrefix(Node* noeud)
 	if (noeud != nullptr) {
 
 		// Traitement de la donnée
-		//TreatNode(root->data);
+		traitement(noeud);
 
 		//Navigation récursive
 		ParcoursPrefix(noeud->leftChild);
@@ -103,10 +108,11 @@ void Arbre::ParcoursPostfix(Node* noeud)
 		ParcoursPostfix(noeud->rightChild);
 
 		//Traitement de la donnée
-		//TreatNode(root->data);
+		traitement(noeud);
 	}
 }
 
+//Calcul du nombre de node de l'arbre
 int Arbre::NbNode(Node* racine)
 {
 	if (racine == nullptr)
@@ -115,7 +121,7 @@ int Arbre::NbNode(Node* racine)
 		return 1 + NbNode(racine->leftChild) + NbNode(racine->rightChild);
 }
 
-int Arbre::ProfondeurArbre(Node* racine, Arbre arbre)
+int Arbre::ProfondeurArbre(Node* racine)
 {
 	int profDroite, profGauche, profondeur;
 
@@ -127,16 +133,102 @@ int Arbre::ProfondeurArbre(Node* racine, Arbre arbre)
 	else
 	{	
 		//calcul de la profondeur du sous arbre droit
-		profDroite = arbre.ProfondeurArbre(racine->rightChild, arbre);
+		profDroite = ProfondeurArbre(racine->rightChild);
 		//calcul de la profondeur du sous arbre gauche
-		profGauche = arbre.ProfondeurArbre(racine->leftChild, arbre);
+		profGauche = ProfondeurArbre(racine->leftChild);
 
-		if (profDroite > profGauche)
-			profondeur = profDroite;
-		else
-			profondeur = profGauche;
+		profondeur = 1 + (profGauche > profDroite ? profGauche : profDroite);
 	}
 	return profondeur;
+}
+
+//Traitement de la donnée
+void Arbre::traitement(Node* noeud)
+{
+	cout << noeud->data << endl;
+}
+
+//Calcul du nombre de node dans le sous arbre gauche
+int Arbre::NbNodeGauche(Node* racine)
+{
+	if (racine == nullptr)
+		return 0;
+	else
+		return 1 + NbNodeGauche(racine->leftChild);
+}
+
+//Calcul du nombre de node dans le sous arbre droit
+int Arbre::NbNodeDroite(Node* racine)
+{
+	if (racine == nullptr)
+		return 0;
+	else
+		return 1 + NbNodeDroite(racine->rightChild);
+}
+
+//vérifie l'equilibrage de l'arbre
+void Arbre::Equilibre(Node* racine)
+{
+	bool isEquilibre = false;
+	while (isEquilibre == false)
+	{
+		int nDroite = NbNodeDroite(racine);
+		int nGauche = NbNodeGauche(racine);
+		cout << "verification de l'equilibrage de l'arbre" << endl;
+		cout << "Gauche : " << nGauche << " noeuds, droite : " << nDroite << " noeuds" <<endl;
+		int equi = nDroite - nGauche;
+		//cout << equi << endl;
+	
+		if (equi >= -1 && equi <= 1)
+		{
+			cout << "l'arbre est equilibre" << endl;
+			isEquilibre = true;
+		}
+		else
+		{
+			if (equi < -1)
+				rotateDroite(racine);
+		
+			if (equi > 1)
+				rotateGauche(racine);
+		}
+	}
+}
+
+//Rotation à droite
+void Arbre::rotateDroite(Node* noeud)
+{
+	if (noeud != nullptr)
+	{
+		Node* Y = noeud;
+		Node* X = noeud->leftChild;
+		Node* B = nullptr;
+		if (X != nullptr)
+		{
+			B = X->rightChild;
+			setRoot(X);
+			X->rightChild = Y;
+		}
+		Y->leftChild = B;
+	}
+}
+
+//Rotation à gauche
+void Arbre::rotateGauche(Node* noeud)
+{
+	if (noeud != nullptr)
+	{
+		Node* Y = noeud;
+		Node* X = noeud->rightChild;
+		Node* B = nullptr;
+		if (X != nullptr)
+		{
+			B = X->leftChild;
+			setRoot(X);
+			X->leftChild = Y;
+		}
+		Y->rightChild = B;
+	}
 }
 
 //Supprimer une Node

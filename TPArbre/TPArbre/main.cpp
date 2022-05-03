@@ -19,6 +19,9 @@ int main(){
 	arbre.Ajouter(1);
 	arbre.Ajouter(9);
 	arbre.Ajouter(14);
+	arbre.Ajouter(17);
+	arbre.Ajouter(18);
+	arbre.Ajouter(19);
 
 	arbre.Afficher(arbre.getRoot());
 
@@ -29,13 +32,31 @@ int main(){
 	
 	arbre.Afficher(arbre.getRoot());
 
+	//parcours prefixe
+	cout << "Parcours Prefixe :" << endl;
+	arbre.ParcoursPrefix(arbre.getRoot());
+
+	//parcours postfixe
+	cout << "Parcours Postfixe :" << endl;
+	arbre.ParcoursPostfix(arbre.getRoot());
+
 	//Calcul du nombre de Node
 	int nb_node = arbre.NbNode(arbre.getRoot());
 	cout << "l'arbre compte " << nb_node << " nodes" << endl;
 
 	//Calcul de la profondeur
-	int profondeur = arbre.ProfondeurArbre(arbre.getRoot(), arbre);
+	int profondeur = arbre.ProfondeurArbre(arbre.getRoot());
 	cout << "l'arbre a une profondeur de " << profondeur << endl;
+
+	arbre.Equilibre(arbre.getRoot());
+
+	//parcours prefixe
+	cout << "Parcours Prefixe :" << endl;
+	arbre.ParcoursPrefix(arbre.getRoot());
+
+	//parcours postfixe
+	cout << "Parcours Postfixe :" << endl;
+	arbre.ParcoursPostfix(arbre.getRoot());
 
 	return 0;
 }
