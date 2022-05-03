@@ -3,21 +3,25 @@
 #include "Arbre.h"
 
 using namespace std;
+
+//Constructeur
 Arbre::Arbre()
 {
 	root = nullptr;
-	taille = 0;
 }
 
+//Destructeur
 Arbre::~Arbre()
 {
 }
 
+//Accesseur
 Node* Arbre::getRoot()
 {
 	return root;
 }
 
+//Placer une node
 void Arbre::Placer(Node* noeud)
 {
 	Node* courant = root;
@@ -47,6 +51,7 @@ void Arbre::Placer(Node* noeud)
 		precedent->rightChild = noeud;
 }
 
+//Ajouter une Node
 void Arbre::Ajouter(int value)
 {
 	//création du noeud en mémoire
@@ -58,6 +63,7 @@ void Arbre::Ajouter(int value)
 	Placer(nouveau);
 }
 
+//Rechercher une node
 Node* Arbre::Rechercher(int value)
 {
 	Node* courant = root;
@@ -73,6 +79,59 @@ Node* Arbre::Rechercher(int value)
 	return nullptr;
 }
 
+//Parcours préfixé
+void Arbre::ParcoursPrefix(Node* noeud)
+{
+	if (noeud != nullptr) {
+
+		// Traitement de la donnée
+		//TreatNode(root->data);
+
+		//Navigation récursive
+		ParcoursPrefix(noeud->leftChild);
+		ParcoursPrefix(noeud->rightChild);
+	}
+}
+
+//Parcours Postfixé
+void Arbre::ParcoursPostfix(Node* noeud)
+{
+	if (noeud != nullptr) {
+
+		//Navigation récursive
+		ParcoursPostfix(noeud->leftChild);
+		ParcoursPostfix(noeud->rightChild);
+
+		//Traitement de la donnée
+		//TreatNode(root->data);
+	}
+}
+
+int Arbre::ProfondeurArbre(Node* racine, Arbre arbre)
+{
+	int profDroite, profGauche, profondeur;
+
+	//si l'arbre est vide on retourne -1
+	if (racine == nullptr)
+	{
+		profondeur = -1;
+	}
+	else
+	{	
+		//calcul de la profondeur du sous arbre droit
+		profDroite = arbre.ProfondeurArbre(racine->rightChild);
+		//calcul de la profondeur du sous arbre gauche
+		profGauche = arbre.ProfondeurArbre(racine->leftChild);
+
+		if (profDroite > profGauche)
+			profondeur = profDroite;
+		else
+			profondeur = profGauche;
+	}
+	return profondeur;
+}
+
+//Supprimer une Node
 void Arbre::Supprimer(Node* noeud)
 {
 	Node* droite = noeud->rightChild;
@@ -99,7 +158,7 @@ void Arbre::Supprimer(Node* noeud)
 			courant = courant->leftChild;
 	}
 
-	//courant pointe maintenant vers noeud précédent le noeud a supprimer
+	//courant pointe maintenant vers le noeud précédent le noeud a supprimer
 	if (courant->rightChild == noeud)
 		courant->rightChild = droite;
 	else
@@ -112,6 +171,7 @@ void Arbre::Supprimer(Node* noeud)
 
 }
 
+//Afficher l'arbre
 void Arbre::Afficher(Node* racine)
 {
 	if (racine->leftChild)
